@@ -4,7 +4,6 @@ import (
 	"bufio"
 	"fmt"
 	"os"
-	"slices"
 	"strconv"
 	"strings"
 )
@@ -32,17 +31,20 @@ func main() {
 		right = append(right, parsedRight)
 	}
 
-	slices.Sort(left)
-	slices.Sort(right)
+	freq := make(map[int]int)
+
+	for i := range N {
+		freq[right[i]] += 1
+	}
 
 	sum := 0
 
 	for i := range N {
-		if left[i] > right[i] {
-			sum += left[i] - right[i]
-		} else {
-			sum += right[i] - left[i]
+		count, ok := freq[left[i]]
+		if !ok {
+			continue
 		}
+		sum += count * left[i]
 	}
 
 	fmt.Print(sum)
