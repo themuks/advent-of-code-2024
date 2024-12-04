@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"regexp"
 	"strconv"
+	"strings"
 )
 
 //go:embed input.txt
@@ -42,5 +43,29 @@ func part1(input string) int {
 }
 
 func part2(input string) int {
-	return 0
+	r := regexp.MustCompile(`do\(\)|don\'t\(\)|mul\((\d+),(\d+)\)`)
+
+	matches := r.FindAllStringSubmatch(input, -1)
+
+	enabled := true
+	answer := 0
+	for _, match := range matches {
+		if strings.HasPrefix(match[0], "don") {
+			enabled = false
+			continue
+		} else if strings.HasPrefix(match[0], "do") {
+			enabled = true
+			continue
+		}
+
+		if !enabled {
+			continue
+		}
+
+		x, _ := strconv.Atoi(match[1])
+		y, _ := strconv.Atoi(match[2])
+		answer += x * y
+	}
+
+	return answer
 }
