@@ -114,5 +114,43 @@ func parseInput(input string) (rules []Rule, updateRows [][]int) {
 }
 
 func part2(input string) int {
-	return 0
+	rules, updateRows := parseInput(input)
+
+	mappedRules := make(map[int][]int)
+	for _, rule := range rules {
+		_, ok := mappedRules[rule.X]
+		if !ok {
+			value := make([]int, 0)
+			value = append(value, rule.Y)
+			mappedRules[rule.X] = value
+		} else {
+			mappedRules[rule.X] = append(mappedRules[rule.X], rule.Y)
+		}
+	}
+
+	answer := 0
+
+	for _, updates := range updateRows {
+		result := checkUpdateRowAndSwap(updates, mappedRules)
+		if !result {
+			answer += updates[len(updates)/2]
+		}
+	}
+
+	return answer
+}
+
+func checkUpdateRowAndSwap(row []int, rules map[int][]int) bool {
+	valid := true
+
+	for i, update := range row {
+		for j := 0; j < i; j++ {
+			if !checkComplience(row[j], rules[update]) {
+				row[j], row[i] = row[i], row[j]
+				valid = false
+			}
+		}
+	}
+
+	return valid
 }

@@ -38,11 +38,9 @@ func Test_part1(t *testing.T) {
 	}
 }
 
-var example2 string
-
 func Test_part2(t *testing.T) {
-	want := 0
-	if got := part2(example2); got != want {
+	want := 123
+	if got := part2(example); got != want {
 		t.Errorf("part2() = %v; want %v", got, want)
 	}
 }
